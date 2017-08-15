@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
-import android.widget.TextView
+import android.widget.{Button, TextView}
 
 class MainActivity extends AppCompatActivity {
 
@@ -14,7 +14,7 @@ class MainActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
 
-    val button = findViewById(R.id.button_increment)
+    val button = findViewById(R.id.button_increment).asInstanceOf[Button]
     button.setOnClickListener(new View.OnClickListener {
       override def onClick(view: View): Unit = {
         ClickCountPool.count += 1
