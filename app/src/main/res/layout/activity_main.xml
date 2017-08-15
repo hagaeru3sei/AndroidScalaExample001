@@ -20,9 +20,9 @@
 
     <Button
         android:id="@+id/button_increment"
-        android:layout_width="585dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Increment"
+        android:text="@string/increment"
         tools:layout_editor_absoluteY="0dp"
         tools:layout_editor_absoluteX="8dp"/>
 
