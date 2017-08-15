@@ -49,3 +49,8 @@ dependencies {
   compile 'org.scala-lang:scala-library:2.11.11'
   testCompile 'junit:junit:4.12'
 }
+
+ScalaCompileOptions.metaClass.daemonServer = true
+ScalaCompileOptions.metaClass.fork = true
+ScalaCompileOptions.metaClass.useAnt = false
+ScalaCompileOptions.metaClass.useCompileDaemon = false
