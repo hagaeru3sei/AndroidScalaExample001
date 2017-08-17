@@ -61,19 +61,17 @@ class ExampleIntentService(name: String) extends IntentService(name) {
 
 object ExampleIntentService {
 
-  def apply: ExampleIntentService = new ExampleIntentService("")
+  def apply: ExampleIntentService = new ExampleIntentService
 
   def apply(name: String): ExampleIntentService = {
     Log.d("ExampleIntentService", s"called apply. name: $name")
     new ExampleIntentService(name)
   }
 
-  def get = binder
-
   private val binder = new LocalBinder
 
   class LocalBinder extends Binder {
-    def service = ExampleIntentService.this
+    def service = ExampleIntentService.apply
   }
 
 }

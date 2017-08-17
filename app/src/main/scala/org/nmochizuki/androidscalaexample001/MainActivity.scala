@@ -19,7 +19,7 @@ class MainActivity extends AppCompatActivity {
     override def onServiceConnected(componentName: ComponentName, iBinder: IBinder): Unit = {
       Log.d(TAG, "onServiceConnected")
       val binder = iBinder.asInstanceOf[LocalBinder]
-      service = Some(binder.service.get.service)
+      service = Some(binder.service)
       bound = true
     }
   }
