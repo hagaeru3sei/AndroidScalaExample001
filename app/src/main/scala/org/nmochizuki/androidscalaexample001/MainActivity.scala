@@ -8,6 +8,9 @@ import android.view.View
 import android.widget.{Button, TextView}
 import org.nmochizuki.androidscalaexample001.ExampleIntentService.LocalBinder
 
+import scala.concurrent._
+import ExecutionContext.Implicits.global
+
 class MainActivity extends AppCompatActivity {
 
   val TAG = "MainActivity"
@@ -21,6 +24,14 @@ class MainActivity extends AppCompatActivity {
       val binder = iBinder.asInstanceOf[LocalBinder]
       service = Some(binder.service)
       bound = true
+
+      Future {
+        service match {
+          case Some(s) => s.run()
+          case None => Log.e(TAG, "Service is None")
+        }
+      }
+
     }
   }
 
@@ -37,7 +48,7 @@ class MainActivity extends AppCompatActivity {
       override def onClick(view: View): Unit = {
         service match {
           case Some(s) =>
-            ClickCountPool.count += s.rand
+            ClickCountPool.count += s.value
             Log.d(TAG, s"click count: ${ClickCountPool.count}")
           case _ =>
             Log.d(TAG, "Service is None.")
@@ -52,11 +63,12 @@ class MainActivity extends AppCompatActivity {
     Log.d(TAG, "onStart")
     super.onStart()
     val intent = new Intent(this, classOf[ExampleIntentService])
-    if (bindService(intent, conn, Context.BIND_AUTO_CREATE)) {
-      startService(intent)
-    } else {
-      Log.w(TAG, "Failed to bind service")
-    }
+    bindService(intent, conn, Context.BIND_AUTO_CREATE)
+  }
+
+  override def onResume(): Unit = {
+    Log.d(TAG, "onResume")
+    super.onResume()
   }
 
   override def onStop(): Unit = {

@@ -13,8 +13,7 @@ class ExampleIntentService(name: String) extends IntentService(name) {
 
   val TAG = "ExampleIntentService"
 
-  var allowBind = true
-
+  @volatile private var allowBind = false
   @volatile private var num = 0
 
   def this() {
@@ -28,11 +27,6 @@ class ExampleIntentService(name: String) extends IntentService(name) {
 
   override def onHandleIntent(intent: Intent): Unit = {
     Log.d(TAG, s"onHandleIntent. intent: $intent")
-    while (true) {
-      num = Random.nextInt(10)
-      Log.d(TAG, s"onStartCommand loop. num=$num")
-      Thread.sleep(5000)
-    }
   }
 
   override def onStartCommand(intent: Intent, flags: Int, startId: Int): Int = {
@@ -43,6 +37,7 @@ class ExampleIntentService(name: String) extends IntentService(name) {
 
   override def onBind(intent: Intent): IBinder = {
     Log.d(TAG, "onBind")
+    allowBind = false
     ExampleIntentService.binder
   }
 
@@ -53,9 +48,19 @@ class ExampleIntentService(name: String) extends IntentService(name) {
 
   override def onDestroy(): Unit = {
     Log.d(TAG, "onDestroy")
+    super.onDestroy()
+    allowBind = true
   }
 
-  def rand = num
+  def run(): Unit = {
+    while (!allowBind) {
+      num = Random.nextInt(10)
+      Log.d(TAG, s"onStartCommand loop. num=$num")
+      Thread.sleep(5000)
+    }
+  }
+
+  def value = num
 
 }
 
